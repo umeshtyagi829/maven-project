@@ -23,7 +23,7 @@ pipeline{
         //Creating git tag
         stage('Tagging'){
             steps{
-                sshagent (credentials: ['jenkins']) {
+                sshagent (credentials: ['github_ssh_key']) {
                     sh "git tag -a $GIT_TAG -m 'Version $BUILD_NUMBER'"
                     sh('git push git@github.com:umeshtyagi829/maven-project.git HEAD:$BRANCH_NAME --tag')
                 
