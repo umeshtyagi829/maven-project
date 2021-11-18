@@ -25,7 +25,7 @@ pipeline{
             steps{
                 sshagent (credentials: ['jenkins']) {
                     sh "git tag -a $GIT_TAG -m 'Version $BUILD_NUMBER'"
-                    sh('git push git@github.com:umeshtyagi829/maven-project.git HEAD:$BRANCH_NAME --tag')
+                    sh('git https://github.com/umeshtyagi829/maven-project.git HEAD:$BRANCH_NAME --tag')
                 
                  }
             }
