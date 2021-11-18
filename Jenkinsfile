@@ -11,13 +11,13 @@ pipeline{
         }
         stage('Build Docker Image'){
             steps{
-                sh 'docker build -t java-mvn:0.1 .'
+                sh 'sudo docker build -t java-mvn:0.1 .'
             }
         }
         stage('Deploy'){
             steps{
-                sh 'docker rm -f java-mvn-app'
-                sh 'docker run --rm -dp 4444:8080 --name java-mvn-app java-mvn:0.1'
+                sh 'sudo docker rm -f java-mvn-app'
+                sh 'sudo docker run --rm -dp 4444:8080 --name java-mvn-app java-mvn:0.1'
             }
         }
     }
