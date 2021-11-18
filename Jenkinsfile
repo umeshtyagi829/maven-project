@@ -30,18 +30,18 @@ pipeline{
                 //}
            // }
         //}
-
-        //Loging into ECR
-        stage('Logging into AWS ECR') {
-            steps {
-                sh('aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | sudo docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com') 
-            }
-        }
-
-        // Building Docker images
+        
+         // Building Docker images
         stage('Building image') {
             steps{
                 sh('sudo docker build  -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} .')
+            }
+        }
+
+        // Logging into ECR
+        stage('Logging into AWS ECR') {
+            steps {
+                sh('aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | sudo docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com') 
             }
         }
 
@@ -52,17 +52,48 @@ pipeline{
                 sh('sudo docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}')
             }
         }
-        //Deployiing
+       
         stage('Deploy'){
             steps{
-                sh 'sudo docker rm -f java-mvn-app'
-                sh 'sudo docker run --rm -dp 4444:8080 --name java-mvn-app java-mvn:0.1'
+                sh('sudo docker rm -f java-mvn-app')
+                sh('sudo docker run --rm -dp 4444:8080 --name java-mvn-app ${REPOSITORY_URI}:$IMAGE_TAG')
             }
         }
     }
     post{
         success{
             archiveArtifacts artifacts: '**/target/*.war', followSymlinks: false
+        }
+    }
+}
+
+pipeline{
+    stages{
+        stage(DEV_DEPLOY){
+            steps{
+                
+            }
+        }
+    }
+}
+
+###
+pipeline{
+    agent any
+    parameters {
+        string(name: "ENVIRONEMNT", defaultValue: "DEV", trim: true, description: "Select Deploy Environment")
+        }
+    stages{
+         stage('Dev Deploy'){
+            when {
+                expression { 
+                   return params.ENVIRONMENT == 'DEV'
+                }
+            }
+            steps{
+                sh 'sudo docker rm -f java-mvn-app'
+                sh 'sudo docker run --rm -dp 4444:8080 --name java-mvn-app ${REPOSITORY_URI}:$IMAGE_TAG'
+            }
         }
     }
 }
