@@ -77,23 +77,3 @@ pipeline{
     }
 }
 
-###
-pipeline{
-    agent any
-    parameters {
-        string(name: "ENVIRONEMNT", defaultValue: "DEV", trim: true, description: "Select Deploy Environment")
-        }
-    stages{
-         stage('Dev Deploy'){
-            when {
-                expression { 
-                   return params.ENVIRONMENT == 'DEV'
-                }
-            }
-            steps{
-                sh 'sudo docker rm -f java-mvn-app'
-                sh 'sudo docker run --rm -dp 4444:8080 --name java-mvn-app ${REPOSITORY_URI}:$IMAGE_TAG'
-            }
-        }
-    }
-}
