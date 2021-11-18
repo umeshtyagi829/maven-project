@@ -67,13 +67,4 @@ pipeline{
     }
 }
 
-pipeline{
-    stages{
-        stage(DEV_DEPLOY){
-            steps{
-                
-            }
-        }
-    }
-}
 
