@@ -21,18 +21,18 @@ pipeline{
         }
 
         //Creating git tag
-       // stage('GIT TAG'){
-        //    steps{
-          //      sshagent (credentials: ['github-ssh-key']) {
-            //        sh "git tag -a $GIT_TAG -m 'Version $BUILD_NUMBER'"
-              //      sh('git push git@github.com:umeshtyagi829/maven-project.git HEAD:$BRANCH_NAME --tag')
+        stage('Tagging'){
+            steps{
+                sshagent (credentials: ['jenkins']) {
+                    sh "git tag -a $GIT_TAG -m 'Version $BUILD_NUMBER'"
+                    sh('git push git@github.com:umeshtyagi829/maven-project.git HEAD:$BRANCH_NAME --tag')
                 
-                //}
-           // }
-        //}
+                 }
+            }
+        }
         
          // Building Docker images
-        stage('Building image') {
+        stage('Building Image') {
             steps{
                 sh('sudo docker build  -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} .')
             }
