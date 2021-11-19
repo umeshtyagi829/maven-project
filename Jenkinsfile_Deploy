@@ -6,10 +6,10 @@ pipeline{
         }
 
     environment {
-        AWS_ACCOUNT_ID="853973692277"
-        AWS_DEFAULT_REGION="us-east-1" 
+        //AWS_ACCOUNT_ID="853973692277"
+        //AWS_DEFAULT_REGION="us-east-1" 
         IMAGE_REPO_NAME="myrepo"
-        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+        //REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
     }
     
     stages{
@@ -26,7 +26,7 @@ pipeline{
                                 parameters: [choice(name: 'APPROVE_QA', choices: 'YES\nNO', description: 'Deploy from DEV to QA?')]
                 if (env.APPROVE_QA == 'YES'){
                     sh "sudo docker rm -f springboot-app || true"
-                    sh "sudo docker run --rm -dp 6666:8080 --name springboot-app ${REPOSITORY_URI}:build-${params.BUILD_NUMBER}"
+                    sh "sudo docker run --rm -dp 6666:8080 --name springboot-app ${IMAGE_REPO_NAME}:build-${params.BUILD_NUMBER}"
           
                 }
             }
