@@ -55,7 +55,6 @@ pipeline{
     }
     post{
         success{
-            archiveArtifacts artifacts: '**/target/*.war', followSymlinks: false
             build job: 'testing_pipeline', parameters: [string(name: 'BUILD_NUMBER', value: "$BUILD_NUMBER")]
         }
     }
