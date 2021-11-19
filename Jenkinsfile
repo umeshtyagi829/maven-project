@@ -55,7 +55,7 @@ pipeline{
     }
     post{
         success{
-            build job: 'testing_pipeline', parameters: [string(name: 'BUILD_NUMBER', value: "$BUILD_NUMBER")]
+            build job: 'assignment-10-deploy', parameters: [string(name: 'BUILD_NUMBER', value: "$BUILD_NUMBER")]
         }
     }
 }
