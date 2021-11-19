@@ -52,13 +52,6 @@ pipeline{
                 sh('sudo docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}')
             }
         }
-       
-        stage('Deploy'){
-            steps{
-                sh('sudo docker rm -f java-mvn-app')
-                sh('sudo docker run --rm -dp 4444:8080 --name java-mvn-app ${REPOSITORY_URI}:$IMAGE_TAG')
-            }
-        }
     }
     post{
         success{
