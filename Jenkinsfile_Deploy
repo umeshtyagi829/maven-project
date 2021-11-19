@@ -16,7 +16,7 @@ pipeline{
          stage('DEV'){
             steps{
                 sh "sudo docker rm -f springboot-app || true"
-                sh "sudo docker run --rm -dp 5555:8080 --name springboot-app ${REPOSITORY_URI}:build-${params.BUILD_NUMBER}"
+                sh "sudo docker run --rm -dp 5555:8080 --name springboot-app ${IMAGE_REPO_NAME}:build-${params.BUILD_NUMBER}"
             }
         }
       stage('QA'){
